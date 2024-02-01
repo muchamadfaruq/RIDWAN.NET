@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title id="title"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="theme-color" content="#3B5998" />
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;" />
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    $(if chap-id)
+    <form name="sendin" action="$(link-login-only)" method="post">
+        <input type="hidden" name="username" />
+        <input type="hidden" name="password" />
+        <input type="hidden" name="dst" value="$(link-orig)" />
+        <input type="hidden" name="popup" value="true" />
+    </form>
+
+    <script type="text/javascript" src="md5.js"></script>
+    <script type="text/javascript">
+        function doLogin() {
+            document.sendin.username.value = document.login.username.value;
+            document.sendin.password.value = hexMD5('$(chap-id)' + document.login.password.value +
+                '$(chap-challenge)');
+            document.sendin.submit();
+            return false;
+        }
+    </script>
+    $(endif)
+
+    <!-- Kotak Tengah Start -->
+    <div id="main" class="main">
+        <!-- Judul -->
+        <div class="box">
+
+            <!-- Logo Judul -->
+            <div>
+                <h1 style="font-size: 40px; margin: 0;">RIDWAN.NET</h1>
+            </div>
+
+            <div class="running-text">
+                <marquee behavior="" direction=""><h1 style="color: red;">ANDA SEDANG MENGGUNAKAN INTERNET MENGGUNAKAN JALUR METRO E TELKOM, SELAMAT MENIKMATI</h1></marquee>
+            </div>
+
+            <!-- Jam -->
+            <div class="time">
+                <div class="date"></div>&nbsp&nbsp
+                <div class="hms"></div>&nbsp&nbsp
+                <div class="ampm"></div>
+            </div>
+
+            <!-- Logo Game -->
+            <div class="gambar"><img src="img/bw.png" width="300"></div>
+        </div>
+        
+        <!-- Pesan Error -->
+        $(if error)<div class="notice" style="font-weight: bold;">$(error)</div>$(endif)
+
+        <!-- Tombol -->
+        <div class="box">
+            <button id="btnvrc" class="small-button" onclick="voucher();"><i class="icon icon-ticket">&#xe802;</i>
+                Voucher</button>
+            <button id="btnmem" class="small-button" onclick="member();"><i class="icon icon-user-circle-o">&#xf2be;</i>
+                Member</button>
+            <button id="qr" class="small-button" onclick="window.location='https://laksa19.github.io/myqr';"> <i
+                    class="icon icon-qrcode">&#xe801;</i> QR
+                Code</button>
+        </div>
+
+        <!-- Login -->
+        <div class="box" id="infologin"></div>
+        <form autocomplete="off" name="login" action="$(link-login-only)" method="post" $(if chap-id)
+            onSubmit="return doLogin()" $(endif)>
+            <input type="hidden" name="dst" value="$(link-orig)" />
+            <input type="hidden" name="popup" value="true" />
+            <input class="username" name="username" type="text" value="$(username)" />
+            <input class="password" name="password" placeholder="Password" type="hidden" />
+            <button class="button" type="submit"><i class="icon icon-login">&#xe803;</i> Login</button>
+        </form>
+
+        <!-- Trial -->
+        $(if trial == 'yes')
+        <div class="box"><a style="text-decoration: underline; color:#fff; font-size: 20px;"
+                href="$(link-login-only)?dst=$(link-orig-esc)&amp;username=T-$(mac-esc)">
+                COBA GRATIS KLIK DISINI</a></div>
+        $(endif)
+
+      
+        <!-- Tabel Daftar Harga -->
+        <table class="table" id="table">
+            <caption style="font-size: 20px; font-weight: bold; margin-bottom:5px; color: yellow;">HARGA VOUCHER WIFI
+            </caption>
+
+            <tr>
+                <th>Paket</th>
+                <!-- <td>Aktif</td> -->
+                <td>Harga</td>
+            </tr>
+            <tr>
+                <th>1 Jam</th>
+                <!-- <td>6 Jam</td> -->
+                <td>Rp 3.000</td>
+            </tr>
+            <tr>
+                <th>2 Jam</th>
+                <!-- <td>1 Hari</td> -->
+                <td>Rp 5.000</td>
+            </tr>
+            <tr>
+                <th>5 Jam</th>
+                <!-- <td>7 Hari</td> -->
+                <td>Rp 10.000</td>
+            </tr>
+            <tr>
+                <th>1 Minggu</th>
+                <!-- <td>30 Hari</td> -->
+                <td>Rp 55.000</td>
+            </tr>
+        </table>
+    </div>
+    <!-- Kotak Tengah End -->
+
+    <!-- Copyright -->
+    <div class="box" style="color:black; font-weight: bold;">
+        <i>Copyright &copy; 2023 Faruq</i><br />
+        <i>Powered by <a style="color:black; text-decoration:underline;"
+                href="https://laksa19.github.io">Mikhmon</a></i>
+        <!-- Tolong jangan dihilangkan bagian ini-->
+    </div>
+
+    <!-- Mesin Voucher -->
+    <script type="text/javascript">
+        var hostname = window.location.hostname;
+        document.getElementById('title').innerHTML = hostname + " > login";
+
+        document.login.username.focus();
+
+        var infologin = document.getElementById('infologin');
+        infologin.innerHTML = "Masukkan Kode Voucher kemudian klik login.";
+
+        // login page 2 mode by Laksamadi Guko
+        var username = document.login.username;
+        var password = document.login.password;
+
+        username.placeholder = "Kode Voucher";
+
+        // set password = username
+        function setpass() {
+            var user = username.value
+            //user = user.toLowerCase();
+            username.value = user;
+            password.value = user;
+        }
+
+        username.onkeyup = setpass;
+
+        // change to voucher mode
+        function voucher() {
+            username.focus();
+            username.onkeyup = setpass;
+            username.placeholder = "Kode Voucher";
+            username.style = "border-radius:3px;"
+            password.type = "hidden";
+            infologin.innerHTML = "Masukkan Kode Voucher kemudian klik login";
+        }
+
+        // change to member mode
+        function member() {
+            username.focus();
+            username.onkeyup = "";
+            username.placeholder = "Username";
+            username.style = "border-radius:3px 3px 0px 0px;"
+            password.type = "password";
+            infologin.innerHTML = "Masukkan Username & Password kemudian klik login";
+        }
+    </script>
+
+    <!-- Mesin Jam -->
+    <script>
+        function updateTime() {
+            var dateInfo = new Date();
+
+            /* time */
+            var hr,
+                _min = (dateInfo.getMinutes() < 10) ? "0" + dateInfo.getMinutes() : dateInfo.getMinutes(),
+                sec = (dateInfo.getSeconds() < 10) ? "0" + dateInfo.getSeconds() : dateInfo.getSeconds(),
+                ampm = (dateInfo.getHours() >= 12) ? "PM" : "AM";
+
+            // replace 0 with 12 at midnight, subtract 12 from hour if 13–23
+            if (dateInfo.getHours() == 0) {
+                hr = 12;
+            } else if (dateInfo.getHours() > 12) {
+                hr = dateInfo.getHours() - 12;
+            } else {
+                hr = dateInfo.getHours();
+            }
+
+            var currentTime = hr + ":" + _min + ":" + sec;
+
+            // print time
+            document.getElementsByClassName("hms")[0].innerHTML = currentTime;
+            document.getElementsByClassName("ampm")[0].innerHTML = ampm;
+
+            /* date */
+            var dow = [
+                "Minggu",
+                "Senin",
+                "Selasa",
+                "Rabu",
+                "Kamis",
+                "Jumat",
+                "Sabtu"
+            ],
+                month = [
+                    "Januari",
+                    "Februari",
+                    "Maret",
+                    "April",
+                    "Mei",
+                    "Juni",
+                    "Juli",
+                    "Agustus",
+                    "September",
+                    "Oktober",
+                    "November",
+                    "Desember"
+                ],
+                day = dateInfo.getDate();
+
+            // store date
+            var currentDate = dow[dateInfo.getDay()] + ", " + day + " " + month[dateInfo.getMonth()];
+
+            document.getElementsByClassName("date")[0].innerHTML = currentDate;
+        };
+
+        // print time and date once, then update them every second
+        updateTime();
+        setInterval(function () {
+            updateTime()
+        }, 1000);
+    </script>
+</body>
+
+</html>
